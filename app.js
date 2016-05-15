@@ -3,6 +3,31 @@ var body_parser = require('body-parser')
 var app = express()
 var json_parser = body_parser.json()
 
+function sendMessage(recipient_id, message) {
+    request(
+        {
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
+            method: 'POST',
+            json: {
+                recipient: {
+                    id: recipient_id
+                },
+                message: message
+            }
+        }, function(error, response, body){
+                    if(error)
+                    {
+                        console.log("Error sending message: ", error)
+                    }
+                    else if(response.body.error)
+                    {
+                        console.log("Error: ", response.body.error)
+                    }
+            }
+    )
+}
+
 //Landing page of the app
 app.get('/', function landing(req, res) {
     res.send("Hey sweet heart <3")
