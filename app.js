@@ -1,5 +1,6 @@
 var express = require('express')
 var body_parser = require('body-parser')
+var request = require('request')
 var app = express()
 var json_parser = body_parser.json()
 
@@ -27,6 +28,8 @@ function sendMessage(recipient_id, message) {
             }
     )
 }
+
+app.use(body_parser.urlencoded({extended: false}))
 
 //Landing page of the app
 app.get('/', function landing(req, res) {
