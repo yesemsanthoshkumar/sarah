@@ -1,5 +1,7 @@
 var express = require('express')
+var body_parser = require('body-parser')
 var app = express()
+var json_parser = body_parser.json()
 
 //Landing page of the app
 app.get('/', function landing(req, res) {
@@ -15,7 +17,7 @@ app.get('/webhook/', function (req, res) {
 })
 
 //Reply to user messages
-app.post('/webhook/', function reply_user(req, res) {
+app.post('/webhook/', json_parser, function reply_user(req, res) {
     var events = req.body.entry[0].messaging
     for(i = 0; i < events.length; i++)
     {

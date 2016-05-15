@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/yesemsanthoshkumar/sarah#readme",
   "dependencies": {
+    "body-parser": "^1.15.1",
     "connect": "^3.4.1",
     "express": "^4.13.4"
   }
