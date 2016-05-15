@@ -1,0 +1,27 @@
+{
+  "name": "sarah",
+  "version": "1.0.0",
+  "description": "A messenger bot for someone special",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yesemsanthoshkumar/sarah.git"
+  },
+  "keywords": [
+    "sarah",
+    "messenger bot"
+  ],
+  "author": "yesemsanthoshkumar",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/yesemsanthoshkumar/sarah/issues"
+  },
+  "homepage": "https://github.com/yesemsanthoshkumar/sarah#readme",
+  "dependencies": {
+    "connect": "^3.4.1",
+    "express": "^4.13.4"
+  }
+}
