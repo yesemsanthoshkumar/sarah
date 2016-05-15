@@ -52,7 +52,7 @@ app.post('/webhook/', json_parser, function reply_user(req, res) {
         var event = events[i]
         if(event.message && event.message.text)
         {
-            sendMessage(event.sender.if, {text: "Echo: " + event.message.text})
+            sendMessage(event.sender.id, {text: "Echo: " + event.message.text})
         }
     }
     res.sendStatus(200)
