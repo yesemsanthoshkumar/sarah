@@ -1,10 +1,41 @@
+var regex = require('regex')
 var express = require('express')
 var body_parser = require('body-parser')
 var request = require('request')
+var port = process.env.PORT || 3000
 var app = express()
 var json_parser = body_parser.json()
+var at_pattern = /@\w+/
+var at_regex = new regex(at_pattern)
 
-function sendMessage(recipient_id, message) {
+function send_struct_messages(recipient_id, img_category) {
+    var image_url = "https://lorempixel.com/400/400/" + img_category.slice(1)
+
+    var msg = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [
+                    {
+                        "title": img_category,
+                        "image_url": image_url,
+                        "buttons": [
+                            {
+                                "type": "web_url",
+                                "url": image_url
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+
+    send_message(recipient_id, msg)
+}
+
+function send_message(recipient_id, msg) {
     request(
         {
             url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -14,7 +45,7 @@ function sendMessage(recipient_id, message) {
                 recipient: {
                     id: recipient_id
                 },
-                message: message
+                message: msg
             }
         }, function(error, response, body){
                     if(error)
@@ -30,10 +61,12 @@ function sendMessage(recipient_id, message) {
 }
 
 app.use(body_parser.urlencoded({extended: false}))
+app.set('views', './views')
+app.set('view engine', 'pug')
 
 //Landing page of the app
 app.get('/', function landing(req, res) {
-    res.send("Hey sweet heart <3")
+    res.render('index.pug')
 })
 
 //Webhook of the app
@@ -52,13 +85,21 @@ app.post('/webhook/', json_parser, function reply_user(req, res) {
         var event = events[i]
         if(event.message && event.message.text)
         {
-            sendMessage(event.sender.id, {text: "Echo: " + event.message.text})
+            var msg = event.message.text
+            if(at_regex.test(msg))
+            {
+                var category = at_pattern.exec(msg)[0]
+                send_struct_messages(recipient_id, category)
+            }
+            else {
+                send_message(event.sender.id, {text: msg})
+            }
         }
     }
     res.sendStatus(200)
 })
 
 //Port number listening
-app.listen(process.env.PORT || 3000, function listening() {
-    console.log("App listening on port 3000")
+app.listen(port, function listening() {
+    console.log("App started listening on "+ port)
 })
