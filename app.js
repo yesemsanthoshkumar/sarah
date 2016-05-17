@@ -1,15 +1,15 @@
-var regex = require('regex')
+// var regex = require('regex')
 var express = require('express')
 var body_parser = require('body-parser')
 var request = require('request')
 var port = process.env.PORT || 3000
 var app = express()
 var json_parser = body_parser.json()
-var at_pattern = /@\w+/
-var at_regex = new regex(at_pattern)
+// var at_pattern = /@\w+/
+// var at_regex = new regex(at_pattern)
 
 function send_struct_messages(recipient_id, img_category) {
-    var image_url = "https://lorempixel.com/400/400/" + img_category.slice(1)
+    var image_url = "https://lorempixel.com/400/400/" + img_category
 
     var msg = {
         "attachment": {
@@ -23,7 +23,13 @@ function send_struct_messages(recipient_id, img_category) {
                         "buttons": [
                             {
                                 "type": "web_url",
-                                "url": image_url
+                                "url": image_url,
+                                "title": img_category
+                            },
+                            {
+                                "type": "postback",
+                                "title": "I like this",
+                                "payload": recipient_id + " likes " + img_category
                             }
                         ]
                     }
@@ -86,14 +92,18 @@ app.post('/webhook/', json_parser, function reply_user(req, res) {
         if(event.message && event.message.text)
         {
             var msg = event.message.text
-            if(at_regex.test(msg))
+            if(msg.slice(1, 2) == "@")
             {
-                var category = at_pattern.exec(msg)[0]
+                var category = msg.slice(2)
                 send_struct_messages(recipient_id, category)
             }
             else {
                 send_message(event.sender.id, {text: msg})
             }
+        }
+        else if(event.postback)
+        {
+            console.log("POSTBACK RECEIVED: "+ JSON.stringify(event.postback))
         }
     }
     res.sendStatus(200)
