@@ -95,7 +95,7 @@ app.post('/webhook/', json_parser, function reply_user(req, res) {
             if(msg.slice(0, 1) === "@")
             {
                 var category = msg.slice(2)
-                send_struct_messages(recipient_id, category)
+                send_struct_messages(event.sender.id, category)
             }
             else {
                 send_message(event.sender.id, {text: msg})
