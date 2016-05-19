@@ -105,7 +105,7 @@ app.get('/webhook/', function (req, res) {
 
 //Reply to user messages
 app.post('/webhook/', json_parser, function reply_user(req, res) {
-    console.log("POST MESSAGE RESPONSE: " + typeof res)
+    console.log("POST MESSAGE RESPONSE: " + JSON.stringify(res, null, 4))
     var events = req.body.entry[0].messaging
     for(i = 0; i < events.length; i++)
     {
@@ -119,7 +119,7 @@ app.post('/webhook/', json_parser, function reply_user(req, res) {
                 send_struct_messages(event.sender.id, category)
             }
             else {
-                send_message(event.sender.id, {text: JSON.stringify(res)})
+                send_message(event.sender.id, {text: msg})
             }
         }
         else if(event.postback)
