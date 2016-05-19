@@ -119,7 +119,7 @@ app.post('/webhook/', json_parser, function reply_user(req, res) {
                 send_struct_messages(event.sender.id, category)
             }
             else {
-                send_message(event.sender.id, {text: res})
+                send_message(event.sender.id, {text: JSON.stringify(res)})
             }
         }
         else if(event.postback)
