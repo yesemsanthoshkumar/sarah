@@ -8,8 +8,28 @@ var json_parser = body_parser.json()
 // var at_pattern = /@\w+/
 // var at_regex = new regex(at_pattern)
 
-function send_struct_messages(recipient_id, img_category) {
-    var image_url = "https://lorempixel.com/400/400/" + img_category
+function glad_after_struct_message(user_id)
+{
+    request(
+        {
+            url: "https://graph.facebook.com/v2.6/" + user_id + "?fields=first_name,last_name",
+            qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
+            method: 'GET'
+        }, function glad_message(err, res) {
+                if (err) {
+                    console.log("Error getting user name: " + err)
+                }
+
+                else {
+                    console.log(res)
+                }
+        }
+    )
+}
+
+function send_struct_messages(recipient_id, img_category)
+{
+    var image_url = "https://loremflickr.com/400/400/" + img_category
 
     var msg = {
         "attachment": {
@@ -85,6 +105,7 @@ app.get('/webhook/', function (req, res) {
 
 //Reply to user messages
 app.post('/webhook/', json_parser, function reply_user(req, res) {
+    console.log(res)
     var events = req.body.entry[0].messaging
     for(i = 0; i < events.length; i++)
     {
