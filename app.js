@@ -105,7 +105,7 @@ app.get('/webhook/', function (req, res) {
 
 //Reply to user messages
 app.post('/webhook/', json_parser, function reply_user(req, res) {
-    console.log("POST MESSAGE RESPONSE: " + typeOf res)
+    console.log("POST MESSAGE RESPONSE: " + typeof res)
     var events = req.body.entry[0].messaging
     for(i = 0; i < events.length; i++)
     {
