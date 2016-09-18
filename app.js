@@ -21,7 +21,8 @@ function glad_after_struct_message(user_id)
                 }
 
                 else {
-                    console.log(res)
+                    var glad = "Glad you have liked it " + res['first_name'] + " " + res['last_name']
+                    send_message(user_id, glad)
                 }
         }
     )
@@ -58,9 +59,11 @@ function send_struct_messages(recipient_id, img_category)
         }
     }
 
-    send_message(recipient_id, msg)
+    send_message(recipient_id, msg)             // Send structured message
+    glad_after_struct_message(recipient_id, msg)    // Send a glad message after the structured message
 }
 
+//Send message function
 function send_message(recipient_id, msg) {
     request(
         {
@@ -105,7 +108,7 @@ app.get('/webhook/', function (req, res) {
 
 //Reply to user messages
 app.post('/webhook/', json_parser, function reply_user(req, res) {
-    console.log("REQUEST OBJECT: " + req)
+    // console.log("REQUEST OBJECT: " + req)
     var events = req.body.entry[0].messaging
     for(i = 0; i < events.length; i++)
     {
